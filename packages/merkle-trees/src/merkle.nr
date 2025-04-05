@@ -91,6 +91,32 @@ where
         node
     }
 
+    fn calculate_root_with_depth<let N: u32>(
+        self, 
+        leaf: T, 
+        indexes: Field, 
+        depth: u32, 
+        hash_path: [T; N]
+    ) -> T {
+        let index_bits: [u1; N] = indexes.to_le_bits();
+        let mut node = leaf;
+        for i in 0..hash_path.len() {
+            if i < depth {
+                let sibling = hash_path[i];
+                if index_bits[i] == 0 {
+                    let left = node;
+                    let right = sibling;
+                    node = (self.hasher)([left, right]);
+                } else {
+                    let left = sibling;
+                    let right = node;
+                    node = (self.hasher)([left, right]);
+                }
+            }
+        }
+        node
+    }
+
     /*
      * Calculates two roots for a given leaf entry based on the passed array of siblings: one root
      * for if the leaf entry was included in the tree and one for if the leaf entry was not included
