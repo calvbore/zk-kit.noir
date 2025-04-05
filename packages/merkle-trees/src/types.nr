@@ -3,6 +3,7 @@ use super::sparse_merkle::SparseMerkleTree;
 
 pub trait Calculator<T, K> {
     fn calculate_root<let N: u32>(self, entry: K, indexes: Field, hash_path: [T; N]) -> T;
+    fn calculate_root_with_depth<let N: u32>(self, entry: K, indexes: Field, depth: u32, hash_path: [T; N]) -> T;
     fn calculate_two_roots<let N: u32>(self, entry: K, indexes: Field, hash_path: [T; N]) -> (T, T);
 }
 
